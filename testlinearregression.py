@@ -6,19 +6,24 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from linearregression import run_batch_grad_descent
+from linearregression import run_batch_grad_descent, run_stochastic_grad_descent
+
 
 def generate_data():
-    X = np.random.rand(100, 10)
-    theta = np.random.randint(1,100,10)
-    y = np.dot(X, theta) + np.random.normal(0, 1, 100)
+    X = np.random.rand(20, 10)
+    theta = np.random.randint(1, 100, 10)
+    y = np.dot(X, theta) + np.random.normal(2, 100, 20)
     return (X, theta, y)
 
-def test_batch_grad_descent():
+
+def run_test(alpha, tolerance, MAX_ITER):
     (X, theta, y) = generate_data()
-    run_batch_grad_descent(X,y)
+    (hist_err1, theta1) = run_batch_grad_descent(X, y, alpha, MAX_ITER, tolerance)
+    (hist_err2, theta2) = run_stochastic_grad_descent(X, y, alpha, MAX_ITER, tolerance)
+    plt.plot(hist_err1)
+    plt.plot(hist_err2)
+    plt.show()
 
 
 if __name__ == "__main__":
-    theta0 = test_batch_grad_descent()
-    print(theta0)
+    run_test(alpha=0.01, tolerance=1e-10, MAX_ITER=100)
